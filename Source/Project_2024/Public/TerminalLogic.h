@@ -10,7 +10,7 @@ struct SCommand {
 public:
 	FString commandName;
 	FString (UTerminalLogic::*function)();
-	FString Description;
+	FString description;
 };
 
 
@@ -22,7 +22,9 @@ class PROJECT_2024_API UTerminalLogic : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTerminalLogic();
-	SCommand helpCommand;
+	SCommand commands[2];
+private:
+	int commandsCount = 2;
 
 protected:
 	// Called when the game starts
@@ -33,6 +35,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable, Category = "Terminal")
 	FString ExecuteCommand(FString command);
+
+private:
+	void SetCommands();
 	FString Help();
-		
+	FString Camera();
 };

@@ -18,13 +18,8 @@ UTerminalLogic::UTerminalLogic()
 void UTerminalLogic::BeginPlay()
 {
 	Super::BeginPlay();
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("TEST2"));
 
-	helpCommand.commandName = "Help";
-	helpCommand.function = &UTerminalLogic::Help;
-	helpCommand.Description = "Work in Progress";
-	
+	SetCommands();
 }
 
 
@@ -38,10 +33,34 @@ void UTerminalLogic::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 FString UTerminalLogic::ExecuteCommand(FString command)
 {
-	return (this->*helpCommand.function)();
+	
+	for (int i = 0; i < commandsCount; i++) {
+		if (command == commands[i].commandName)
+			return (this->*commands[i].function)();
+	}
+	return "No such command as " + command;
 }
 
 FString UTerminalLogic::Help()
 {
-	return "Tu beda opisane instrukcje";
+	FString output = "";
+	for (int i = 0; i < commandsCount; i++)
+		output += "\n" + commands[i].commandName + " - " + commands[i].description ;
+	return output;
+}
+
+void UTerminalLogic::SetCommands()
+{
+	commands[0].commandName = "Help";
+	commands[0].function = &UTerminalLogic::Help;
+	commands[0].description = "See list of the commands and what they do";
+
+	commands[1].commandName = "Camera";
+	commands[1].function = &UTerminalLogic::Camera;
+	commands[1].description = "Open camera system";
+}
+
+FString UTerminalLogic::Camera()
+{
+	return "Opening camera system";
 }
