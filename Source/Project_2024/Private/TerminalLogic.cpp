@@ -19,9 +19,11 @@ void UTerminalLogic::BeginPlay()
 {
 	Super::BeginPlay();
 	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("This is the pre-set text"));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("TEST2"));
 
-	// ...
+	helpCommand.commandName = "Help";
+	helpCommand.function = &UTerminalLogic::Help;
+	helpCommand.Description = "Work in Progress";
 	
 }
 
@@ -34,8 +36,12 @@ void UTerminalLogic::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 }
 
-void UTerminalLogic::GetString(FString m_text)
+FString UTerminalLogic::ExecuteCommand(FString command)
 {
-	;
+	return (this->*helpCommand.function)();
 }
 
+FString UTerminalLogic::Help()
+{
+	return "Tu beda opisane instrukcje";
+}

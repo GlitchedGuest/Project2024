@@ -6,6 +6,13 @@
 #include "Components/ActorComponent.h"
 #include "TerminalLogic.generated.h"
 
+struct SCommand {
+public:
+	FString commandName;
+	FString (UTerminalLogic::*function)();
+	FString Description;
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
 class PROJECT_2024_API UTerminalLogic : public UActorComponent
@@ -15,7 +22,7 @@ class PROJECT_2024_API UTerminalLogic : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTerminalLogic();
-	FString text;
+	SCommand helpCommand;
 
 protected:
 	// Called when the game starts
@@ -25,7 +32,7 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable, Category = "Terminal")
-	static void GetString(FString m_text);
-
+	FString ExecuteCommand(FString command);
+	FString Help();
 		
 };
