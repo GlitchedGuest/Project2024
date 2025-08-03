@@ -19,6 +19,13 @@ void UTerminalLogic::BeginPlay()
 {
 	Super::BeginPlay();
 
+	folders[0].Name = "Folder1";
+	folders[1].Name = "Folder2";
+
+	startingFolder.Name = "User";
+	startingFolder.Folders.Add("Folder1", MakeUnique<SFolder>(MoveTemp(folders[0])));
+	startingFolder.Folders.Add("Folder2", MakeUnique<SFolder>(MoveTemp(folders[1])));
+
 	SetCommands();
 }
 
@@ -58,9 +65,33 @@ void UTerminalLogic::SetCommands()
 	commands[1].commandName = "Camera";
 	commands[1].function = &UTerminalLogic::Camera;
 	commands[1].description = "Open camera system";
+
+	commands[2].commandName = "Status";
+	commands[2].function = &UTerminalLogic::Status;
+	commands[2].description = "Display subject's status";
+
+	commands[3].commandName = "ls";
+	commands[3].function = &UTerminalLogic::List;
+	commands[3].description = "Display contents of the current folder";
 }
 
 FString UTerminalLogic::Camera()
 {
 	return "Opening camera system";
+}
+
+FString UTerminalLogic::Status()
+{
+	return "Subject's Status:";
+}
+
+FString UTerminalLogic::List()
+{
+	FString output = "C:/" + startingFolder.Name + "/\n";
+
+	for (auto& Elem : startingFolder.Folders) {
+		output += Elem.Value->Name + "\n";
+	}
+
+	return output;
 }

@@ -13,6 +13,15 @@ public:
 	FString description;
 };
 
+struct SFile {
+	FString name;
+};
+
+struct SFolder {
+	FString Name;
+	TArray<SFile> Files;
+	TMap<FString, TUniquePtr<SFolder>> Folders;
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
 class PROJECT_2024_API UTerminalLogic : public UActorComponent
@@ -22,9 +31,12 @@ class PROJECT_2024_API UTerminalLogic : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTerminalLogic();
-	SCommand commands[2];
+	SFolder startingFolder;
+	SFolder folders[2];
+
+	SCommand commands[4];
 private:
-	int commandsCount = 2;
+	int commandsCount = 4;
 
 protected:
 	// Called when the game starts
@@ -40,4 +52,6 @@ private:
 	void SetCommands();
 	FString Help();
 	FString Camera();
+	FString Status();
+	FString List();
 };
