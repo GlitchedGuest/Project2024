@@ -9,8 +9,10 @@
 struct SCommand {
 public:
 	FString commandName;
-	FString (UTerminalLogic::*function)();
-	FString description;
+	FString (UTerminalLogic::*function)(FString parameters);
+	TArray<FString> description;
+	TArray<FString> parameters;
+	int parametersCount;
 };
 
 struct SFile {
@@ -19,8 +21,9 @@ struct SFile {
 
 struct SFolder {
 	FString Name;
-	TArray<SFile> Files;
-	TMap<FString, TUniquePtr<SFolder>> Folders;
+	FString Path;
+	FString ParentFolderPath;
+	TArray<FString> ChildrenFolders;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
@@ -31,12 +34,13 @@ class PROJECT_2024_API UTerminalLogic : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UTerminalLogic();
-	SFolder startingFolder;
-	SFolder folders[2];
+	SFolder currentFolder;
+	TMap<FString, SFolder> Folders;
+	SFolder folders[4];
 
-	SCommand commands[4];
+	SCommand commands[5];
 private:
-	int commandsCount = 4;
+	int commandsCount = 5;
 
 protected:
 	// Called when the game starts
@@ -50,8 +54,10 @@ public:
 
 private:
 	void SetCommands();
-	FString Help();
-	FString Camera();
-	FString Status();
-	FString List();
+	void SetFolderTree();
+	FString Help(FString arguments);
+	FString Camera(FString arguments);
+	FString Status(FString arguments);
+	FString List(FString arguments);
+	FString SwitchDirectory(FString arguments);
 };
