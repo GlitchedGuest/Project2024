@@ -19,6 +19,7 @@ void UTerminalLogic::BeginPlay()
 {
 	Super::BeginPlay();
 
+	SetFiles();
 	SetCommands();
 	SetFolderTree();
 }
@@ -71,6 +72,20 @@ FString UTerminalLogic::Help(FString arguments)
 	return output;
 }
 
+void UTerminalLogic::SetFiles() {
+	files[0].name = "Test1.txt";
+	files[1].name = "Test2.txt";
+
+	files[0].content = "To jest testowy tekst";
+	files[1].content = "To jest bardzo testowy tekst";
+
+	files[0].path = "C:/User/Test1.txt";
+	files[1].path = "C:/User/Folder1/Test2.txt";
+
+	Files.Add("C:/User/Test1.txt", MoveTemp(files[0]));
+	Files.Add("C:/User/Folder1/Test2.txt", MoveTemp(files[1]));
+}
+
 void UTerminalLogic::SetFolderTree()
 {
 	folders[0].Name = "User";
@@ -78,10 +93,12 @@ void UTerminalLogic::SetFolderTree()
 	folders[0].ParentFolderPath = "None";
 	folders[0].ChildrenFolders.Add("Folder1");
 	folders[0].ChildrenFolders.Add("Folder2");
+	folders[0].ChildrenFiles.Add("Test1.txt");
 
 	folders[1].Name = "Folder1";
 	folders[1].ParentFolderPath = "C:/User";
 	folders[1].Path = "C:/User/Folder1";
+	folders[1].ChildrenFiles.Add("Test2.txt");
 
 	folders[2].Name = "Folder2";
 	folders[2].ParentFolderPath = "C:/User";
@@ -131,6 +148,13 @@ void UTerminalLogic::SetCommands()
 	commands[4].description.Add(TEXT("Specific folder you want to go"));
 	commands[4].parameters.Add(TEXT("[folder name]"));
 	commands[4].parametersCount = 1;
+
+	commands[5].commandName = "cat";
+	commands[5].function = &UTerminalLogic::Cat;
+	commands[5].description.Add(TEXT("Print files content"));
+	commands[5].description.Add(TEXT("Specific file you want to print"));
+	commands[5].parameters.Add(TEXT("[file name]"));
+	commands[5].parametersCount = 1;
 }
 
 FString UTerminalLogic::Camera(FString arguments)
@@ -148,7 +172,10 @@ FString UTerminalLogic::List(FString arguments)
 	FString output = "C:/" + currentFolder.Name + "/\n";
 
 	for (auto& Elem : currentFolder.ChildrenFolders) {
-		output += Elem + "\n";
+		output += "\t*" + Elem + "\n";
+	}
+	for (auto& Elem : currentFolder.ChildrenFiles) {
+		output += "\t-" + Elem + "\n";
 	}
 
 	return output;
@@ -164,4 +191,14 @@ FString UTerminalLogic::SwitchDirectory(FString arguments)
 	else
 		currentFolder = Folders[currentFolder.Path + "/" + arguments];
 	return "current folder: " +currentFolder.Name;
+}
+FString UTerminalLogic::Cat(FString arguments) {
+	if (arguments == "NONE")
+		return "No file was parsed as an parameter";
+	else if(Files.Contains(arguments))
+		return Files[arguments].content;
+	else if(Files.Contains(currentFolder.Path + "/" + arguments))
+		return Files[currentFolder.Path + "/" + arguments].content;
+	else
+		return "No such file was found";
 }

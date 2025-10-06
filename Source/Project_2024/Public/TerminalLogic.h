@@ -17,6 +17,8 @@ public:
 
 struct SFile {
 	FString name;
+	FString content;
+	FString path;
 };
 
 struct SFolder {
@@ -24,6 +26,7 @@ struct SFolder {
 	FString Path;
 	FString ParentFolderPath;
 	TArray<FString> ChildrenFolders;
+	TArray<FString> ChildrenFiles;
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable )
@@ -37,10 +40,12 @@ public:
 	SFolder currentFolder;
 	TMap<FString, SFolder> Folders;
 	SFolder folders[4];
+	SFile files[2];
+	TMap<FString, SFile> Files;
 
-	SCommand commands[5];
+	SCommand commands[6];
 private:
-	int commandsCount = 5;
+	int commandsCount = 6;
 
 protected:
 	// Called when the game starts
@@ -53,6 +58,7 @@ public:
 	FString ExecuteCommand(FString command);
 
 private:
+	void SetFiles();
 	void SetCommands();
 	void SetFolderTree();
 	FString Help(FString arguments);
@@ -60,4 +66,5 @@ private:
 	FString Status(FString arguments);
 	FString List(FString arguments);
 	FString SwitchDirectory(FString arguments);
+	FString Cat(FString arguments);
 };
