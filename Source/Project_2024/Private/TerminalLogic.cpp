@@ -86,34 +86,56 @@ void UTerminalLogic::SetFiles() {
 	Files.Add("C:/User/Folder1/Test2.txt", MoveTemp(files[1]));
 }
 
+void UTerminalLogic::SetFolders(SFolder &folder)
+{
+	int foldersNumber = 0;
+	if (FoldersCount < 5)
+		foldersNumber = FoldersCount;
+	else
+		foldersNumber = (rand() % 5)+1;
+	
+	for (int i = 0; i < foldersNumber; i++)
+	{
+		bool found = true;
+		while (found) {
+			int FolderIndex = (rand() % 14) + 1;
+			if (folders[FolderIndex].ParentFolderPath == "None") {
+				folder.ChildrenFolders.Add(folders[FolderIndex].Name);
+				folders[FolderIndex].Path = folder.Path + "/" + folders[FolderIndex].Name;
+				folders[FolderIndex].ParentFolderPath = folder.Path;
+				Folders.Add(folders[FolderIndex].Path, MoveTemp(folders[FolderIndex]));
+				found = false;
+			}
+				
+		}
+	}
+	FoldersCount -= foldersNumber;
+	if(folder.Name == folders[0].Name)
+		SetFolders(Folders[folder.Path + "/" +folder.ChildrenFolders[0]]);
+}
+
 void UTerminalLogic::SetFolderTree()
 {
 	folders[0].Name = "User";
 	folders[0].Path = "C:/User";
-	folders[0].ParentFolderPath = "None";
-	folders[0].ChildrenFolders.Add("Folder1");
-	folders[0].ChildrenFolders.Add("Folder2");
-	folders[0].ChildrenFiles.Add("Test1.txt");
+	
 
 	folders[1].Name = "Folder1";
-	folders[1].ParentFolderPath = "C:/User";
-	folders[1].Path = "C:/User/Folder1";
-	folders[1].ChildrenFiles.Add("Test2.txt");
-
 	folders[2].Name = "Folder2";
-	folders[2].ParentFolderPath = "C:/User";
-	folders[2].Path = "C:/User/Folder2";
-	folders[2].ChildrenFolders.Add("Folder3");
-
 	folders[3].Name = "Folder3";
-	folders[3].Path = "C:/User/Folder1/Folder3";
-	folders[3].ParentFolderPath = "C:/User/Folder2";
-	
-	Folders.Add("C:/User", MoveTemp(folders[0]));
-	Folders.Add("C:/User/Folder1", MoveTemp(folders[1]));
-	Folders.Add("C:/User/Folder2", MoveTemp(folders[2]));
-	Folders.Add("C:/User/Folder2/Folder3", MoveTemp(folders[3]));
-
+	folders[4].Name = "Folder4";
+	folders[5].Name = "Folder5";
+	folders[6].Name = "Folder6";
+	folders[7].Name = "Folder7";
+	folders[8].Name = "Folder8";
+	folders[9].Name = "Folder9";
+	folders[10].Name = "Folder10";
+	folders[11].Name = "Folder11";
+	folders[12].Name = "Folder12";
+	folders[13].Name = "Folder13";
+	folders[14].Name = "Folder14";
+	SetFolders(folders[0]);
+	Folders.Add(folders[0].Path, MoveTemp(folders[0]));
 
 	currentFolder = Folders["C:/User"];
 }
