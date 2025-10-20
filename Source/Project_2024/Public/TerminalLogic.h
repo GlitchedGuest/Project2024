@@ -39,13 +39,13 @@ public:
 	UTerminalLogic();
 	SFolder currentFolder;
 	TMap<FString, SFolder> Folders;
-	SFolder folders[15];
+	SFolder folders[30];
+	TArray<SFolder> foldersPool;
 	SFile files[2];
 	TMap<FString, SFile> Files;
 
 	SCommand commands[6];
 private:
-	int FoldersCount = 15;
 	int commandsCount = 6;
 
 protected:
@@ -62,7 +62,7 @@ private:
 	void SetFiles();
 	void SetCommands();
 	void SetFolderTree();
-	void SetFolders(SFolder &folder);
+	void SetFolders(SFolder &folder, int deep);
 	FString Help(FString arguments);
 	FString Camera(FString arguments);
 	FString Status(FString arguments);

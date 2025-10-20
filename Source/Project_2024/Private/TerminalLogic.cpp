@@ -86,32 +86,32 @@ void UTerminalLogic::SetFiles() {
 	Files.Add("C:/User/Folder1/Test2.txt", MoveTemp(files[1]));
 }
 
-void UTerminalLogic::SetFolders(SFolder &folder)
+void UTerminalLogic::SetFolders(SFolder &folder, int deep)
 {
+	if (deep > 4 || foldersPool.Num()-1 == 0)
+		return;
 	int foldersNumber = 0;
-	if (FoldersCount < 5)
-		foldersNumber = FoldersCount;
+	if (foldersPool.Num()-1 < 3)
+		foldersNumber = foldersPool.Num() - 1;
 	else
-		foldersNumber = (rand() % 5)+1;
+		foldersNumber = (rand() % 3)+1;
 	
 	for (int i = 0; i < foldersNumber; i++)
 	{
-		bool found = true;
-		while (found) {
-			int FolderIndex = (rand() % 14) + 1;
-			if (folders[FolderIndex].ParentFolderPath == "None") {
-				folder.ChildrenFolders.Add(folders[FolderIndex].Name);
-				folders[FolderIndex].Path = folder.Path + "/" + folders[FolderIndex].Name;
-				folders[FolderIndex].ParentFolderPath = folder.Path;
-				Folders.Add(folders[FolderIndex].Path, MoveTemp(folders[FolderIndex]));
-				found = false;
-			}
+		int FolderIndex = (rand() % (foldersPool.Num()-1)) + 1;
+		folder.ChildrenFolders.Add(foldersPool[FolderIndex].Name);
+		foldersPool[FolderIndex].Path = folder.Path + "/" + foldersPool[FolderIndex].Name;
+		foldersPool[FolderIndex].ParentFolderPath = folder.Path;
+		Folders.Add(foldersPool[FolderIndex].Path, MoveTemp(foldersPool[FolderIndex]));
+		foldersPool.RemoveAt(FolderIndex);
 				
-		}
 	}
-	FoldersCount -= foldersNumber;
-	if(folder.Name == folders[0].Name)
-		SetFolders(Folders[folder.Path + "/" +folder.ChildrenFolders[0]]);
+	deep += 1;
+	for (int i = 0; i < foldersNumber; i++)
+	{	if (rand() % 100 > 30)
+			SetFolders(Folders[folder.Path + "/" + folder.ChildrenFolders[i]], deep);
+	}
+		
 }
 
 void UTerminalLogic::SetFolderTree()
@@ -134,7 +134,24 @@ void UTerminalLogic::SetFolderTree()
 	folders[12].Name = "Folder12";
 	folders[13].Name = "Folder13";
 	folders[14].Name = "Folder14";
-	SetFolders(folders[0]);
+	folders[15].Name = "Folder15";
+	folders[16].Name = "Folder16";
+	folders[17].Name = "Folder17";
+	folders[18].Name = "Folder18";
+	folders[19].Name = "Folder19";
+	folders[20].Name = "Folder20";
+	folders[21].Name = "Folder21";
+	folders[22].Name = "Folder22";
+	folders[23].Name = "Folder23";
+	folders[24].Name = "Folder24";
+	folders[25].Name = "Folder25";
+	folders[26].Name = "Folder26";
+	folders[27].Name = "Folder27";
+	folders[28].Name = "Folder28";
+	folders[29].Name = "Folder29";
+	for (auto& Elem : folders)
+		foldersPool.Add(Elem);
+	SetFolders(folders[0], 0);
 	Folders.Add(folders[0].Path, MoveTemp(folders[0]));
 
 	currentFolder = Folders["C:/User"];
@@ -191,7 +208,7 @@ FString UTerminalLogic::Status(FString arguments)
 
 FString UTerminalLogic::List(FString arguments)
 {
-	FString output = "C:/" + currentFolder.Name + "/\n";
+	FString output = currentFolder.Path + "/\n";
 
 	for (auto& Elem : currentFolder.ChildrenFolders) {
 		output += "\t*" + Elem + "\n";
