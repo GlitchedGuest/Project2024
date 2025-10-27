@@ -22,6 +22,8 @@ void UTerminalLogic::BeginPlay()
 	SetFiles();
 	SetCommands();
 	SetFolderTree();
+	SetFilesInFolders();
+	currentFolder = Folders["C:/User"];
 }
 
 
@@ -73,17 +75,31 @@ FString UTerminalLogic::Help(FString arguments)
 }
 
 void UTerminalLogic::SetFiles() {
-	files[0].name = "Test1.txt";
-	files[1].name = "Test2.txt";
+	files[0].name = "File1.txt";
+	files[1].name = "File2.txt";
+	files[2].name = "File3.txt";
+	files[3].name = "File4.txt";
+	files[4].name = "File5.txt";
+	files[5].name = "File6.txt";
 
-	files[0].content = "To jest testowy tekst";
-	files[1].content = "To jest bardzo testowy tekst";
+	files[0].content = "Lorem Ipsum1";
+	files[1].content = "Lorem Ipsum2";
+	files[2].content = "Lorem Ipsum3";
+	files[3].content = "Lorem Ipsum4";
+	files[4].content = "Lorem Ipsum5";
+	files[5].content = "Lorem Ipsum6";
+}
 
-	files[0].path = "C:/User/Test1.txt";
-	files[1].path = "C:/User/Folder1/Test2.txt";
+void UTerminalLogic::SetFilesInFolders() {
+	TArray<TPair<FString,SFolder>> foldersArray  = Folders.Array();
+	int foldersCount = foldersArray.Num();
+	for (int i = 0; i < 6; i++)
+	{
+		int randomFolderIndex = rand() % foldersCount;
+		Folders[foldersArray[randomFolderIndex].Value.Path].ChildrenFiles.Add(files[i].name);
+		Files.Add(foldersArray[randomFolderIndex].Value.Path + "/" + files[i].name, MoveTemp(files[i]));
 
-	Files.Add("C:/User/Test1.txt", MoveTemp(files[0]));
-	Files.Add("C:/User/Folder1/Test2.txt", MoveTemp(files[1]));
+	}
 }
 
 void UTerminalLogic::SetFolders(SFolder &folder, int deep)
@@ -154,7 +170,7 @@ void UTerminalLogic::SetFolderTree()
 	SetFolders(folders[0], 0);
 	Folders.Add(folders[0].Path, MoveTemp(folders[0]));
 
-	currentFolder = Folders["C:/User"];
+	
 }
 
 void UTerminalLogic::SetCommands()

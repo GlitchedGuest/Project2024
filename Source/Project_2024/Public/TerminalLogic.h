@@ -41,7 +41,7 @@ public:
 	TMap<FString, SFolder> Folders;
 	SFolder folders[30];
 	TArray<SFolder> foldersPool;
-	SFile files[2];
+	SFile files[6];
 	TMap<FString, SFile> Files;
 
 	SCommand commands[6];
@@ -63,6 +63,7 @@ private:
 	void SetCommands();
 	void SetFolderTree();
 	void SetFolders(SFolder &folder, int deep);
+	void SetFilesInFolders();
 	FString Help(FString arguments);
 	FString Camera(FString arguments);
 	FString Status(FString arguments);
