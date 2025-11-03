@@ -88,6 +88,18 @@ void UTerminalLogic::SetFiles() {
 	files[3].content = "Lorem Ipsum4";
 	files[4].content = "Lorem Ipsum5";
 	files[5].content = "Lorem Ipsum6";
+
+	int randomIndex = rand() % 6;
+	files[randomIndex].content += "WINABLE";
+	files[randomIndex].winnable = true;
+	for (int i = 0; i < 6; i++)
+	{
+		int random = rand() % 100;
+		if (random < 20) {
+			files[i].content += " WINABLE";
+			files[i].winnable = true;
+		}
+	}
 }
 
 void UTerminalLogic::SetFilesInFolders() {
@@ -210,6 +222,18 @@ void UTerminalLogic::SetCommands()
 	commands[5].description.Add(TEXT("Specific file you want to print"));
 	commands[5].parameters.Add(TEXT("[file name]"));
 	commands[5].parametersCount = 1;
+
+	commands[6].commandName = "send";
+	commands[6].function = &UTerminalLogic::Send;
+	commands[6].description.Add(TEXT("Send files to x"));
+	commands[6].description.Add(TEXT("Full path to the file"));
+	commands[6].parameters.Add(TEXT("[file name]"));
+	commands[6].parametersCount = 1;
+
+	commands[7].commandName = "exit";
+	commands[7].function = &UTerminalLogic::Exit;
+	commands[7].description.Add(TEXT("exit terminal"));
+	commands[7].parametersCount = 0;
 }
 
 FString UTerminalLogic::Camera(FString arguments)
@@ -256,4 +280,17 @@ FString UTerminalLogic::Cat(FString arguments) {
 		return Files[currentFolder.Path + "/" + arguments].content;
 	else
 		return "No such file was found";
+}
+
+FString UTerminalLogic::Send(FString arguments) {
+	if (arguments == "NONE")
+		return "No file was parsed as an parameter";
+	else if (Files.Contains(arguments))
+		return Files[arguments].content;
+	else
+		return "No such file was found";
+}
+
+FString UTerminalLogic::Exit(FString arguments) {
+	return "Exiting terminal";
 }

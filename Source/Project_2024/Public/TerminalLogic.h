@@ -19,6 +19,7 @@ struct SFile {
 	FString name;
 	FString content;
 	FString path;
+	bool winnable = false;
 };
 
 struct SFolder {
@@ -44,9 +45,9 @@ public:
 	SFile files[6];
 	TMap<FString, SFile> Files;
 
-	SCommand commands[6];
+	SCommand commands[8];
 private:
-	int commandsCount = 6;
+	int commandsCount = 8;
 
 protected:
 	// Called when the game starts
@@ -70,4 +71,6 @@ private:
 	FString List(FString arguments);
 	FString SwitchDirectory(FString arguments);
 	FString Cat(FString arguments);
+	FString Send(FString arguments);
+	FString Exit(FString arguments);
 };
