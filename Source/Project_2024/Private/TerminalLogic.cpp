@@ -286,9 +286,16 @@ FString UTerminalLogic::Send(FString arguments) {
 	if (arguments == "NONE")
 		return "No file was parsed as an parameter";
 	else if (Files.Contains(arguments))
-		return Files[arguments].content;
+		return CheckSend(Files[arguments]);
 	else
 		return "No such file was found";
+}
+
+FString UTerminalLogic::CheckSend(SFile file){
+	if (file.winnable == true)
+		return "Correct file more to go";
+	else
+		return "Invalid";
 }
 
 FString UTerminalLogic::Exit(FString arguments) {

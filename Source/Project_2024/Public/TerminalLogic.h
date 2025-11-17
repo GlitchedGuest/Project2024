@@ -73,4 +73,5 @@ private:
 	FString Cat(FString arguments);
 	FString Send(FString arguments);
 	FString Exit(FString arguments);
+	FString CheckSend(SFile file);
 };
