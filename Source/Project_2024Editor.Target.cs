@@ -8,7 +8,7 @@ public class Project_2024EditorTarget : TargetRules
 	public Project_2024EditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V5;
+		DefaultBuildSettings = BuildSettingsVersion.V6;
 
 		ExtraModuleNames.AddRange( new string[] { "Project_2024" } );
 	}
