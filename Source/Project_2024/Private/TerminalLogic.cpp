@@ -98,6 +98,7 @@ void UTerminalLogic::SetFiles() {
 		if (random < 20) {
 			files[i].content += " WINABLE";
 			files[i].winnable = true;
+			correctFilesCount++;
 		}
 	}
 }
@@ -287,17 +288,26 @@ FString UTerminalLogic::Send(FString arguments) {
 		return "No file was parsed as an parameter";
 	else if (Files.Contains(arguments))
 		return CheckSend(Files[arguments]);
+	else if (Files.Contains(currentFolder.Path + "/" + arguments))
+		return CheckSend(Files[currentFolder.Path + "/" + arguments]);
 	else
 		return "No such file was found";
 }
 
 FString UTerminalLogic::CheckSend(SFile file){
-	if (file.winnable == true)
+	if (file.winnable == true) {
+		correctFilesCount--;
 		return "Correct file more to go";
+	}
 	else
 		return "Invalid";
 }
 
 FString UTerminalLogic::Exit(FString arguments) {
 	return "Exiting terminal";
+}
+
+int UTerminalLogic::GetCorrectFilesCount()
+{
+	return correctFilesCount;
 }

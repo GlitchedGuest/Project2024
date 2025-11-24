@@ -44,6 +44,7 @@ public:
 	TArray<SFolder> foldersPool;
 	SFile files[6];
 	TMap<FString, SFile> Files;
+	int correctFilesCount = 1;
 
 	SCommand commands[8];
 private:
@@ -58,6 +59,8 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 	UFUNCTION(BlueprintCallable, Category = "Terminal")
 	FString ExecuteCommand(FString command);
+	UFUNCTION(BlueprintCallable, Category = "Terminal")
+	int GetCorrectFilesCount();
 
 private:
 	void SetFiles();
