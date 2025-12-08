@@ -82,24 +82,19 @@ void UTerminalLogic::SetFiles() {
 	files[4].name = "File5.txt";
 	files[5].name = "File6.txt";
 
-	files[0].content = "Lorem Ipsum1";
-	files[1].content = "Lorem Ipsum2";
-	files[2].content = "Lorem Ipsum3";
-	files[3].content = "Lorem Ipsum4";
-	files[4].content = "Lorem Ipsum5";
-	files[5].content = "Lorem Ipsum6";
-
 	int randomIndex = rand() % 6;
-	files[randomIndex].content += "WINABLE";
+	files[randomIndex].content = FileGenerator(true);
 	files[randomIndex].winnable = true;
 	for (int i = 0; i < 6; i++)
 	{
 		int random = rand() % 100;
-		if (random < 20) {
-			files[i].content += " WINABLE";
+		if (random < 20 && !files[i].winnable) {
+			files[i].content = FileGenerator(true);
 			files[i].winnable = true;
 			correctFilesCount++;
 		}
+		else
+			files[i].content = FileGenerator(false);
 	}
 }
 
@@ -310,4 +305,20 @@ FString UTerminalLogic::Exit(FString arguments) {
 int UTerminalLogic::GetCorrectFilesCount()
 {
 	return correctFilesCount;
+}
+
+FString UTerminalLogic::FileGenerator(bool winnable) {
+	FString text = "";
+	int randomIndex = rand() % 5;
+
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (i == randomIndex && winnable)
+			text += "winnable";
+		else
+			text += "lorem ipsum \n";
+	}
+
+	return text;
 }

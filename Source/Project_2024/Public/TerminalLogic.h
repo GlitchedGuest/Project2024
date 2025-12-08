@@ -77,4 +77,5 @@ private:
 	FString Send(FString arguments);
 	FString Exit(FString arguments);
 	FString CheckSend(SFile file);
+	FString FileGenerator(bool winnable);
 };
